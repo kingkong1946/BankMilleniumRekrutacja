@@ -1,18 +1,12 @@
 namespace BankMilleniumRekrutacja
 {
+    using BankMilleniumRekrutacja.Module.Foo.Application;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.HttpsPolicy;
-    using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
-    using Microsoft.Extensions.Logging;
     using Microsoft.OpenApi.Models;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
 
     public class Startup
     {
@@ -27,11 +21,17 @@ namespace BankMilleniumRekrutacja
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddControllers();
+            services.AddControllers(option => option.RespectBrowserAcceptHeader = true)
+                .AddXmlSerializerFormatters();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "BankMilleniumRekrutacja", Version = "v1" });
             });
+
+            services.AddAutoMapper(typeof(FooAutoMapperProfile).Assembly);
+
+            services.AddFooModule();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
